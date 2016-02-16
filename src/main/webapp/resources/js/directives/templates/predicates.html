@@ -1,0 +1,18 @@
+<table class="searchPredicates">
+<thead></thead>
+<tbody>
+	<tr>
+		<td ng-repeat="predicate in predicateConfig">	
+			<span class="predicateName">{{predicate.name}}</span>
+			<select ng-model="predicate.operator">
+				<option ng-if="predicate.type=='date' || predicate.type=='number'" value="GREATERTHAN">&gt;</option>
+				<option ng-if="predicate.type=='date' || predicate.type=='number'" value="lESSTHAN">&lt;</option>
+				<option ng-if="predicate.type=='date' || predicate.type=='number'" value="EQUAL">&#61</option>
+				<option ng-if="predicate.type='string'" value="CONTAINS">Contains</option>
+				<option ng-if="predicate.type='string'" value="BEGINSWITH">Begins With</option>
+			</select>
+			<input type="text" ng-model="predicate.value" size="10"></input>
+		</td>
+	</tr>
+	</tbody>
+</table>
