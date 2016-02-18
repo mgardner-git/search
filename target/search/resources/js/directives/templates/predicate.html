@@ -1,0 +1,17 @@
+<div>
+	<div class="predicate">
+		<span class="predicateName">{{predicate.label}}</span>
+		<select ng-model="predicate.operator" ng-disabled="busy">
+			<option ng-if="predicate.type=='DATE' || predicate.type=='number'" value="GREATERTHAN">&gt;</option>
+			<option ng-if="predicate.type=='DATE' || predicate.type=='number'" value="LESSTHAN">&lt;</option>
+			<option ng-if="predicate.type=='DATE' || predicate.type=='number'" value="EQUAL">&#61</option>
+			<option ng-if="predicate.type=='STRING'" value="CONTAINS">Contains</option>
+			<option ng-if="predicate.type=='STRING'" value="BEGINSWITH">Begins With</option>
+		</select>		
+		<!-- <input type="text" ng-model="predicate.value" ng-disabled="busy" ng-model-options="{ updateOn: 'blur'}" size="10"></input>-->
+		
+		<div class="predicateInput">
+			<search-input predicate="predicate"></search-input>
+		</div>
+	</div>
+</div>

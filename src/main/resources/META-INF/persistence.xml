@@ -6,9 +6,9 @@
 		
 		<properties>			
 			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"></property>
-			<property name="hibernate.connection.password" value="1likework"></property>
-			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/allegiant"></property>		
-			<property name="hibernate.connection.username" value="root"></property>
+			<property name="hibernate.connection.password" value="s3@rch1"></property>
+			<property name="hibernate.connection.url" value="jdbc:mysql://159.203.255.18:3306/search"></property>		
+			<property name="hibernate.connection.username" value="search"></property>
 		</properties>
 		
 	</persistence-unit>

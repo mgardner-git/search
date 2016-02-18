@@ -178,6 +178,7 @@
 	    
 	</dependencies>
     <build>
+        <finalName>search</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -205,6 +206,7 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+        
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

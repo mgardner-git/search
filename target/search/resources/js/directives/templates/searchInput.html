@@ -1,0 +1,7 @@
+<div class="pi">
+
+	<date-time date-val="predicate.value" ng-if="predicate.type=='DATE'"></date-time> 
+	<numeric field-name="predicate.value" ng-if="predicate.type=='NUMBER'"></numeric>
+	<input ng-model="predicate.value" ng-if="predicate.type=='STRING'"></input>
+
+</div>

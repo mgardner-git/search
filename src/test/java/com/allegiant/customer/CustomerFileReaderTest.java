@@ -38,7 +38,7 @@ public class CustomerFileReaderTest extends TestCase{
 		List<Customer> results = service.readAll();
 		assertTrue(results.size() - initialSize == 1000);
 		
-	}
+	} 
 	
 	@Test
 	public void testSplit(){
