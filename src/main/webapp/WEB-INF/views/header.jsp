@@ -19,6 +19,7 @@
 <script type="text/javascript" src="/allegiant/resources/js/directives/predicate.js"></script>
 <script type="text/javascript" src="/allegiant/resources/js/directives/results.js"></script>
 <script type="text/javascript" src="/allegiant/resources/js/directives/searchInput.js"></script>
+<script type="text/javascript" src="/allegiant/resources/js/directives/pagination.js"></script>
 <title>Monte Gardner - G4 UX Challenge</title>
 <meta name="description" content="Monte Gardner's Allegiant Challenge">
 <meta name="viewport" content="width=device-width, initial-scale=1">

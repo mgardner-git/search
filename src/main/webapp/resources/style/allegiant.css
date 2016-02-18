@@ -55,7 +55,7 @@ header
 	background-position: center;
 	background-repeat: no-repeat;
 	padding:5px 10px;
-	background-color: transparent;
+	background-color: #9eb3c8;
 }
 header h1
 {
@@ -138,3 +138,50 @@ div.predicate{
 table.results{
 	width: 100%;
 }
+
+
+.pagination
+{
+	border: 1px solid blue;
+}
+.pagination .pageNumbers{
+	display: inline;
+}
+.pagination .pageNumbers li{
+	list-style-type: none;
+	display: inline-block;
+	margin-right: 5px;
+	cursor: pointer;
+}
+.pagination .pageNumbers li{
+	width: 16px;
+	height: 16px;
+	background-position: top left;
+}
+.pagination .pageNumbers li.currentPage{
+	font-weight: bold;
+	text-decoration : underline;
+}
+.pagination .pageNumbers li.first{
+	background-image: URL(../img/first.png);
+}
+.pagination .pageNumbers li.previous{
+	background-image: URL(../img/previous.png);
+}
+.pagination .pageNumbers li.next {
+	background-image: URL(../img/next.png);
+}
+.pagination .pageNumbers li.last {
+	background-image: URL(../img/last.png);
+}
+
+/**
+Icons created by 
+http://icongal.com/gallery/icon/44643/32/last_next_first_previous
+*/
+
+
+.pagination label{
+	font-size: smaller;
+}
+

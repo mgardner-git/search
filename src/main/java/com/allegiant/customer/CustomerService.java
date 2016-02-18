@@ -73,10 +73,6 @@ public class CustomerService {
 	 */
 	public SearchResponse<Customer> search (SearchRequest request) throws Exception{
 		EntityManager em = emf.createEntityManager();
-		Query query = em.createNamedQuery("Customer.findAll");
-		List<Customer> allCustomers = query.getResultList();
-		int totalCustomers = allCustomers.size();
-		Map<String,String> parameterMap = new Hashtable<String,String>();
 		CriteriaBuilder queryBuilder = em.getCriteriaBuilder();
 		CriteriaQuery<Customer> cq = queryBuilder.createQuery(Customer.class);
 		
@@ -153,7 +149,10 @@ public class CustomerService {
 				case LESSTHAN:			
 					if (uiPredicate.getType() == PredicateType.DATE){
 						try{
-							Date predicateDate = new Date(Long.parseLong(uiPredicate.getValue()));
+							String inputTimeStamp = uiPredicate.getValue();
+							Long unixTime = Long.parseLong(inputTimeStamp); //note that this is in seconds
+							unixTime *= 1000; //convert to milliseconds
+							Date predicateDate = new Date(unixTime);
 							dbPredicate = queryBuilder.lessThanOrEqualTo(root.<Date>get(uiPredicate.getName()), predicateDate);
 						}catch (NumberFormatException nfe){
 							throw new SearchException("Date Field for " + uiPredicate.getName() + " is in the wrong format: " + uiPredicate.getValue());
@@ -175,18 +174,30 @@ public class CustomerService {
 		
 		cq.where(criteria.toArray(new Predicate[criteria.size()]));
 		
-				
 		TypedQuery<Customer> compoundQuery = em.createQuery(cq);
-		System.out.println("----");
+		//remember, the UI is 1 based, while Spring is 0 based
+		int indexOfFirstResult = (request.getPageNumber()-1)*request.getItemsPerPage();
 		
-		for (String key : parameterMap.keySet()){			
-			String val = parameterMap.get(key);
-			System.out.println(key + "-->" + val);
-			compoundQuery.setParameter(key, val);
-			
+		//compoundQuery.setFirstResult(indexOfFirstResult);
+		//compoundQuery.setMaxResults(request.getItemsPerPage());
+		
+		List<Customer> results = compoundQuery.getResultList();
+		int pageNumber = request.getPageNumber();
+		double numPagesD = Math.ceil((double)results.size()/(double)request.getItemsPerPage());
+		int numPages = (int) numPagesD;
+		
+		if (indexOfFirstResult > results.size()){
+			indexOfFirstResult = Math.max(0,(results.size()-1)-request.getItemsPerPage());
+			pageNumber = numPages; //last page
 		}
-		List<Customer> results = compoundQuery.getResultList();		
-		SearchResponse<Customer> response = new SearchResponse<Customer>(results,5); //TODO: pagination
+		List<Customer> pageOfResults = new ArrayList<Customer>();
+		for (int index=indexOfFirstResult; index < indexOfFirstResult + request.getItemsPerPage() && index < results.size(); index++){
+			pageOfResults.add(results.get(index));
+		}
+		
+		SearchResponse<Customer> response = new SearchResponse<Customer>(pageOfResults,numPages); 
+		response.setPageNumber(pageNumber);
+		
 		return response;
 	}
 	

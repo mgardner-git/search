@@ -42,7 +42,7 @@ app.directive("searchWrapper",function(){
 				var callback = function(data){
 					//$scope.searchResponse  = data;
 					$scope.$apply(function(){
-					$scope.searchResponse.numberOfPages = data.numberOfPages;
+					$scope.searchResponse.numPages = data.numPages;
 					$scope.searchResponse.pageNumber = data.pageNumber;					
 					angular.copy(data.results, $scope.searchResponse.results);
 					$scope.busy=false;

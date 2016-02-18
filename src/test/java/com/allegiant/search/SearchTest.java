@@ -161,9 +161,9 @@ public class SearchTest extends TestCase{
 	}
 	
 	@Test
-	public void testEnumStuff(){
+	public void testMiscStuff(){
 		for (Object obj : PredicateOperator.values()){
 			System.out.println(obj);
-		}
+		}		
 	}
 }

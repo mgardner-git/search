@@ -1,0 +1,14 @@
+<div class="pagination">
+	<label>Items Per Page</label>
+	<select ng-model="searchRequest.itemsPerPage">
+		<option ng-repeat="q in quantities" value="{{q}}">{{q}}</option>
+	</select>
+	<label>Page #</label>
+	<ul class="pageNumbers">
+		<li ng-click="first()" class="first"></li>
+		<li ng-click="previous()" class="previous"></li>
+		<li ng-repeat="pageNumber in pages" ng-class="{currentPage: pageNumber == searchResponse.pageNumber}" ng-click="searchRequest.pageNumber = pageNumber">{{pageNumber}}</li>
+		<li ng-click="next()" class="next"></li>
+		<li ng-click="last()" class="last"></li>
+	</ul>
+</div>
