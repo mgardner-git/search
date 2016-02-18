@@ -23,7 +23,36 @@ app.directive("results",function(){
 				}else{
 					return result;
 				}
+			};
+			$scope.setSort = function(predicate, event){
+				var sorts = new Array();
+				var sort = {};
+				sort.columnName = predicate.name;
+				sort.sortType = event.ctrlKey ? "DESC":"ASC";
+				sorts.push(sort);
+				$scope.searchRequest.sorts = sorts;
+				//TODO: Need some kind of visual marker on the header
+			};
+			
+			$scope.isAscendingSort = function(predicate){
+				for (var index=0; index < $scope.searchRequest.sorts.length; index++){
+					var checkSort = $scope.searchRequest.sorts[index];
+					if (checkSort.sortType == "ASC" && checkSort.columnName == predicate.name){
+						return true;
+					}
+				}
+				return false;
+			};
+			$scope.isDescendingSort = function(predicate){
+				for (var index=0; index < $scope.searchRequest.sorts.length; index++){
+					var checkSort = $scope.searchRequest.sorts[index];
+					if (checkSort.sortType == "DESC" && checkSort.columnName == predicate.name){
+						return true;
+					}
+				}
+				return false;				
 			}
+			
 		}
 	};
 });

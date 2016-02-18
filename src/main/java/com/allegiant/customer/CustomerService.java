@@ -2,9 +2,7 @@ package com.allegiant.customer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,6 +12,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -24,6 +23,8 @@ import com.allegiant.search.SearchException;
 import com.allegiant.search.SearchPredicate;
 import com.allegiant.search.SearchRequest;
 import com.allegiant.search.SearchResponse;
+import com.allegiant.search.Sort;
+import com.allegiant.search.SortType;
 
 
 @Service
@@ -173,11 +174,23 @@ public class CustomerService {
 		
 		
 		cq.where(criteria.toArray(new Predicate[criteria.size()]));
-		
+		List<Order> orders = new ArrayList<Order>();
+		for (Sort sort : request.getSorts()){		
+			@SuppressWarnings("rawtypes")
+			Expression column = root.get(sort.getColumnName());
+			if (sort.getSortType() == SortType.ASC){
+				orders.add(queryBuilder.asc(column));
+			}else{
+				orders.add(queryBuilder.desc(column));
+			}
+		}
+		cq.orderBy(orders);
 		TypedQuery<Customer> compoundQuery = em.createQuery(cq);
+		
 		//remember, the UI is 1 based, while Spring is 0 based
 		int indexOfFirstResult = (request.getPageNumber()-1)*request.getItemsPerPage();
 		
+		//TODO: Is it more efficient to do a count query somehow, and then query the page??
 		//compoundQuery.setFirstResult(indexOfFirstResult);
 		//compoundQuery.setMaxResults(request.getItemsPerPage());
 		

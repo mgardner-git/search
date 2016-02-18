@@ -1,6 +1,8 @@
 package com.allegiant.search;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -10,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.allegiant.customer.Customer;
+import com.allegiant.customer.CustomerFileReader;
 import com.allegiant.customer.CustomerService;
 
 import junit.framework.TestCase;
@@ -46,28 +49,14 @@ public class SearchTest extends TestCase{
 		
 	}
 	
-	@Test
-	public void testGreaterThanDate() throws Exception{
-		SearchRequest request = new SearchRequest();
-		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
-		request.setPredicates(sps);
-		SearchPredicate greaterSp = new SearchPredicate();
-		greaterSp.setName("createdAt");
-		greaterSp.setOperator(PredicateOperator.GREATERTHAN);
-		greaterSp.setType(PredicateType.DATE);
-		greaterSp.setValue("2015-01-30 23:24:56");
-		sps.add(greaterSp);
-		
-		SearchResponse<Customer> response = service.search(request);
-		assertEquals(3, response.getResults().size());
-		
-	}
+
 	
 	@Test
 	public void testEqualsNumber() throws Exception {
 		SearchRequest request = new SearchRequest();
 		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
 		request.setPredicates(sps);
+		request.setPageNumber(1);
 		SearchPredicate equalSp = new SearchPredicate();
 		equalSp.setName("longitude");
 		equalSp.setOperator(PredicateOperator.EQUAL);
@@ -81,7 +70,29 @@ public class SearchTest extends TestCase{
 		assertEquals("Martha", result.getFirstName());
 		assertEquals("mhowellpv@eepurl.com", result.getEmail());		
 	}
+
+	private String  translateToUnixTimeStamp(String dateStr) throws ParseException{
+		Date date = CustomerFileReader.parseDate(dateStr);
+		long timeVal =  date.getTime();
+		return String.valueOf(timeVal);
+	}
 	
+	@Test
+	public void testGreaterThanDate() throws Exception{
+		SearchRequest request = new SearchRequest();
+		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
+		request.setPredicates(sps);
+		SearchPredicate greaterSp = new SearchPredicate();
+		greaterSp.setName("createdAt");
+		greaterSp.setOperator(PredicateOperator.GREATERTHAN);
+		greaterSp.setType(PredicateType.DATE);
+		greaterSp.setValue(translateToUnixTimeStamp("2015-01-30 23:24:56"));
+		sps.add(greaterSp);
+		
+		SearchResponse<Customer> response = service.search(request);
+		assertEquals(3, response.getResults().size());
+		
+	}
 	@Test
 	public void testEqualsDate() throws Exception {
 		SearchRequest request = new SearchRequest();
@@ -91,7 +102,7 @@ public class SearchTest extends TestCase{
 		equalSp.setName("createdAt");
 		equalSp.setOperator(PredicateOperator.EQUAL);
 		equalSp.setType(PredicateType.DATE);
-		equalSp.setValue("2015-01-13 18:46:40");
+		equalSp.setValue(translateToUnixTimeStamp("2015-01-13 18:46:40"));
 		sps.add(equalSp);
 		
 		SearchResponse<Customer> response = service.search(request);
@@ -125,6 +136,7 @@ public class SearchTest extends TestCase{
 		SearchRequest request = new SearchRequest();
 		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
 		request.setPredicates(sps);
+		request.setItemsPerPage(30);
 		SearchPredicate containsSp = new SearchPredicate();
 		containsSp.setName("lastName");
 		containsSp.setType(PredicateType.STRING);
@@ -145,6 +157,7 @@ public class SearchTest extends TestCase{
 		SearchRequest request = new SearchRequest();
 		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
 		request.setPredicates(sps);
+		request.setItemsPerPage(20);
 		SearchPredicate prefixSps = new SearchPredicate();
 		prefixSps.setName("lastName");
 		prefixSps.setType(PredicateType.STRING);
@@ -158,6 +171,38 @@ public class SearchTest extends TestCase{
 			String prefix = checkCustomer.getLastName().substring(0, 2);
 			assertEquals("Mc", prefix);
 		}	
+	}
+	
+	@Test
+	public void testSort() throws Exception{
+		SearchRequest request = new SearchRequest();
+		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
+		request.setPredicates(sps);
+		request.setItemsPerPage(30);
+		SearchPredicate containsSp = new SearchPredicate();
+		containsSp.setName("lastName");
+		containsSp.setType(PredicateType.STRING);
+		containsSp.setOperator(PredicateOperator.CONTAINS);
+		containsSp.setValue("owel");
+		sps.add(containsSp);
+		
+		Sort sort = new Sort();
+		sort.setColumnName("longitude");
+		sort.setSortType(SortType.ASC);
+		List<Sort> sorts = new ArrayList<Sort>();
+		sorts.add(sort);
+		request.setSorts(sorts);
+		
+		SearchResponse<Customer> response = service.search(request);
+		assertEquals(28, response.getResults().size());
+		for (int index=0; index < response.getResults().size(); index++){
+			if (index < response.getResults().size()-1){
+				Customer current = response.getResults().get(index);
+				Customer next = response.getResults().get(index+1);
+				assertTrue(current.getLongitude() < next.getLongitude());
+			}			
+		}		
+	
 	}
 	
 	@Test

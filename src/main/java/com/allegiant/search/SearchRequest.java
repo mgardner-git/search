@@ -1,13 +1,19 @@
 package com.allegiant.search;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchRequest {
 
-	private int pageNumber;
-	private int itemsPerPage;
+	private int pageNumber=1;
+	private int itemsPerPage=10;
 	private List<SearchPredicate> predicates;
+	private List<Sort> sorts;
 	
+	public SearchRequest(){
+		predicates = new ArrayList<SearchPredicate>();
+		sorts = new ArrayList<Sort>();
+	}
 	/**
 	 * @return the pageNumber
 	 */
@@ -43,6 +49,18 @@ public class SearchRequest {
 	 */
 	public void setPredicates(List<SearchPredicate> predicates) {
 		this.predicates = predicates;
+	}
+	/**
+	 * @return the sorts
+	 */
+	public List<Sort> getSorts() {
+		return sorts;
+	}
+	/**
+	 * @param sorts the sorts to set
+	 */
+	public void setSorts(List<Sort> sorts) {
+		this.sorts = sorts;
 	}
 
 	

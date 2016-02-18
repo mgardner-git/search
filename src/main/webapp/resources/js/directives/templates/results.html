@@ -3,7 +3,8 @@
 <table class="results" border="1">
 	<thead>
 	<tr>
-		<th ng-repeat = "predicate in searchRequest.predicates">
+		<th ng-repeat = "predicate in searchRequest.predicates" 
+		ng-click="setSort(predicate, $event)" ng-class="{asc:isAscendingSort(predicate), desc:isDescendingSort(predicate)}">
 			{{predicate.label}}
 		</th>
 	</tr>
@@ -16,4 +17,7 @@
 	</tr>
 	</tbody>
 </table>
+<p class="instructions">
+Click on a table header to sort from smallest/first to greatest/last.  Hold down the ctrl key while clicking to sort in reverse order.
+</p>
 </div>

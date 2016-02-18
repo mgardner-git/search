@@ -138,8 +138,22 @@ div.predicate{
 table.results{
 	width: 100%;
 }
-
-
+table.results th{
+	background-color: gray;
+	padding-right: 32px;
+	height: 32px;
+	background-position: top right;
+	background-repeat: no-repeat;
+}
+/**
+http://www.free-icons-download.net/icons/in-ascending-alphabetical-order-icon-84283.html
+*/
+table.results th.asc{
+	background-image: URL(../img/asc.png);
+} 
+table.results th.desc{
+	background-image: URL(../img/desc.png);
+}
 .pagination
 {
 	border: 1px solid blue;

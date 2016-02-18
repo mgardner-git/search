@@ -19,6 +19,7 @@ app.directive("searchWrapper",function(){
 				var result = {};
 				result.pageNumber = $scope.searchRequest.pageNumber;
 				result.itemsPerPage = $scope.searchRequest.itemsPerPage;
+				result.sorts = $scope.searchRequest.sorts;
 				result.predicates = [];
 				for (var index=0; index < $scope.searchRequest.predicates.length; index++){
 					var predicate = $scope.searchRequest.predicates[index];

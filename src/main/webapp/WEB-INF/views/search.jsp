@@ -13,6 +13,7 @@
 		$scope.searchRequest = {
 				pageNumber: 1,
 				itemsPerPage: 20,
+				sorts: [],
 				predicates:[
 		
 				{
