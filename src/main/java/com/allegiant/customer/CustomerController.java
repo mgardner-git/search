@@ -37,11 +37,12 @@ public class CustomerController {
 		return result;
 	}
 	
-	@RequestMapping(value="/search/searchRequest", method=RequestMethod.GET, produces="application/json")
-	public @ResponseBody SearchResponse<Customer> search (SearchRequest request) throws Exception{
+	@RequestMapping(value="/search", method=RequestMethod.POST, produces="application/json"   )
+	public @ResponseBody SearchResponse<Customer> search (@RequestBody SearchRequest request) throws Exception{
 		SearchResponse<Customer> response = customerService.search(request);
 		return response;
-	}
+		
+ 	}
 	
 	@RequestMapping(value="", method=RequestMethod.PUT)
 	public  @ResponseBody Customer update(@RequestBody Customer customer){

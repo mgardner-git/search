@@ -103,16 +103,67 @@ public class SearchTest extends TestCase{
 
 	@Test
 	public void testEqualsString() throws Exception{
+		SearchRequest request = new SearchRequest();
+		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
+		request.setPredicates(sps);
+		SearchPredicate equalSp = new SearchPredicate();
+		equalSp.setName("firstName");
+		equalSp.setOperator(PredicateOperator.EQUAL);
+		equalSp.setType(PredicateType.STRING);
+		equalSp.setValue("Martha");
+		sps.add(equalSp);
 		
+		SearchResponse<Customer> response = service.search(request);
+		assertEquals(10, response.getResults().size());
+		for (Customer checkCustomer : response.getResults()){
+			assertEquals("Martha", checkCustomer.getFirstName());
+		}
 	}
 	
 	@Test
 	public void testContains() throws Exception{
+		SearchRequest request = new SearchRequest();
+		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
+		request.setPredicates(sps);
+		SearchPredicate containsSp = new SearchPredicate();
+		containsSp.setName("lastName");
+		containsSp.setType(PredicateType.STRING);
+		containsSp.setOperator(PredicateOperator.CONTAINS);
+		containsSp.setValue("owel");
+		sps.add(containsSp);
 		
+		SearchResponse<Customer> response = service.search(request);
+		assertEquals(28, response.getResults().size());
+		for (Customer checkCustomer : response.getResults()){
+			assertTrue(checkCustomer.getLastName().contains("owel"));
+		}		
 	}
+	
 	
 	@Test
 	public void testBeginsWith() throws Exception{
+		SearchRequest request = new SearchRequest();
+		List<SearchPredicate> sps = new ArrayList<SearchPredicate>();
+		request.setPredicates(sps);
+		SearchPredicate prefixSps = new SearchPredicate();
+		prefixSps.setName("lastName");
+		prefixSps.setType(PredicateType.STRING);
+		prefixSps.setOperator(PredicateOperator.BEGINSWITH);
+		prefixSps.setValue("Mc");
+		sps.add(prefixSps);
 		
+		SearchResponse<Customer> response = service.search(request);
+		assertEquals(14, response.getResults().size());
+		for (Customer checkCustomer : response.getResults()){
+			String prefix = checkCustomer.getLastName().substring(0, 2);
+			assertEquals("Mc", prefix);
+		}	
+	}
+	
+	@Test
+	public void testEnumStuff(){
+		for (Object obj : PredicateOperator.values()){
+			System.out.println(obj);
+		}
 	}
 }

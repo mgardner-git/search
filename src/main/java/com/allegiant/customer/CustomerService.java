@@ -2,7 +2,9 @@ package com.allegiant.customer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -74,34 +76,56 @@ public class CustomerService {
 		Query query = em.createNamedQuery("Customer.findAll");
 		List<Customer> allCustomers = query.getResultList();
 		int totalCustomers = allCustomers.size();
-		
+		Map<String,String> parameterMap = new Hashtable<String,String>();
 		CriteriaBuilder queryBuilder = em.getCriteriaBuilder();
 		CriteriaQuery<Customer> cq = queryBuilder.createQuery(Customer.class);
 		
 		Root<Customer> root = cq.from(Customer.class);
 		//Predicate compoundPredicate = new CompoundPredicate(queryBuilder, BooleanOperator.AND);
 		List<Predicate> criteria = new ArrayList<Predicate>(request.getPredicates().size());
-		for (SearchPredicate uiPredicate : request.getPredicates()){
+		for (int index=0; index < request.getPredicates().size(); index++){
+			SearchPredicate uiPredicate = request.getPredicates().get(index);
 			Predicate dbPredicate = null;
 			switch (uiPredicate.getOperator()){
-				case BEGINSWITH :
+				case BEGINSWITH: 
 					if (uiPredicate.getType() == PredicateType.STRING){						
-						dbPredicate = queryBuilder.like(root.<String>get(uiPredicate.getName()), "$" + uiPredicate.getValue());
+						dbPredicate = queryBuilder.like(root.<String>get(uiPredicate.getName()),  uiPredicate.getValue() + "%");
+						/*
+						Expression<String> columnExpression = root.<String>get(uiPredicate.getName());
+						Expression<String> inputExpression = queryBuilder.parameter(String.class, "val" + index);
+						//store the name of the parameter and it's actual query-time value, becasue we can't set parameters now, have to wait until all the predicates are built.
+						parameterMap.put("val" + index, uiPredicate.getValue());
+						Expression<Integer> containsExpression = queryBuilder.function("INSTR", Integer.class, columnExpression, inputExpression);						
+						dbPredicate = queryBuilder.equal(containsExpression, 1);
+						*/						
+						
 					}else{
 						throw new SearchException("Only String types can have a begins-with operator");
 					}
 					break;
-				case CONTAINS : 
+				case CONTAINS: 
 					if (uiPredicate.getType() == PredicateType.STRING){
-						dbPredicate = queryBuilder.like(root.<String>get(uiPredicate.getName()), ".*" + uiPredicate.getValue() + ".*");					
+						dbPredicate = queryBuilder.like(root.<String>get(uiPredicate.getName()), "%" + uiPredicate.getValue() + "%");
+						/*
+						Expression<String> columnExpression = root.<String>get(uiPredicate.getName());
+						Expression<String> inputExpression = queryBuilder.parameter(String.class, "val" + index);
+						//store the name of the parameter and it's actual query-time value, becasue we can't set parameters now, have to wait until all the predicates are built.
+						parameterMap.put("val" + index, uiPredicate.getValue());
+						Expression<Integer> containsExpression = queryBuilder.function("INSTR", Integer.class, columnExpression, inputExpression);						
+						dbPredicate = queryBuilder.greaterThan(containsExpression, 0);						
+						*/
 					}else{
-						throw new SearchException("Only String types can have an ends-with operator");
+						throw new SearchException("Only String types can have a contains operator");
 					}
 					break;
 				case EQUAL: 
 					if (uiPredicate.getType() == PredicateType.DATE){
-						Date predicateDate = CustomerFileReader.parseDate(uiPredicate.getValue());
-						dbPredicate = queryBuilder.equal(root.<Date>get(uiPredicate.getName()), predicateDate);
+						try{
+							Date predicateDate = new Date(Long.parseLong(uiPredicate.getValue()));
+							dbPredicate = queryBuilder.equal(root.<Date>get(uiPredicate.getName()), predicateDate);
+						}catch (NumberFormatException nfe){
+							throw new SearchException("Date Field for " + uiPredicate.getName() + " is in the wrong format: " + uiPredicate.getValue());
+						}
 					}else if (uiPredicate.getType() == PredicateType.STRING){
 						dbPredicate = queryBuilder.equal(root.<String>get(uiPredicate.getName()), uiPredicate.getValue());						
 					}else{
@@ -113,8 +137,12 @@ public class CustomerService {
 					break;
 				case GREATERTHAN:
 					if (uiPredicate.getType() == PredicateType.DATE){
-						Date predicateDate = CustomerFileReader.parseDate(uiPredicate.getValue());
-						dbPredicate = queryBuilder.greaterThanOrEqualTo(root.<Date>get(uiPredicate.getName()), predicateDate);
+						try{
+							Date predicateDate = new Date(Long.parseLong(uiPredicate.getValue()));
+							dbPredicate = queryBuilder.greaterThanOrEqualTo(root.<Date>get(uiPredicate.getName()), predicateDate);
+						}catch (NumberFormatException nfe){
+							throw new SearchException("Date Field for " + uiPredicate.getName() + " is in the wrong format: " + uiPredicate.getValue());
+						}						
 					}else if (uiPredicate.getType() == PredicateType.STRING){
 						dbPredicate = queryBuilder.greaterThanOrEqualTo(root.<String>get(uiPredicate.getName()), uiPredicate.getValue());						
 					}else{
@@ -122,10 +150,14 @@ public class CustomerService {
 						dbPredicate = queryBuilder.greaterThanOrEqualTo(root.<Float>get(uiPredicate.getName()), Float.parseFloat(uiPredicate.getValue()));						
 					}
 					break;
-				case LESSTHAN:
+				case LESSTHAN:			
 					if (uiPredicate.getType() == PredicateType.DATE){
-						Date predicateDate = CustomerFileReader.parseDate(uiPredicate.getValue());
-						dbPredicate = queryBuilder.lessThanOrEqualTo(root.<Date>get(uiPredicate.getName()), predicateDate);
+						try{
+							Date predicateDate = new Date(Long.parseLong(uiPredicate.getValue()));
+							dbPredicate = queryBuilder.lessThanOrEqualTo(root.<Date>get(uiPredicate.getName()), predicateDate);
+						}catch (NumberFormatException nfe){
+							throw new SearchException("Date Field for " + uiPredicate.getName() + " is in the wrong format: " + uiPredicate.getValue());
+						}
 					}else if (uiPredicate.getType() == PredicateType.STRING){
 						dbPredicate = queryBuilder.lessThanOrEqualTo(root.<String>get(uiPredicate.getName()), uiPredicate.getValue());
 					}else{
@@ -133,16 +165,26 @@ public class CustomerService {
 						
 					}
 					break;
+					
 				default:
 					throw new SearchException("Unknown operator type: "  + uiPredicate.getOperator());
 			}
 			criteria.add(dbPredicate);			
 		}	
 		
-		for (Predicate predicate : criteria){
-			cq.where(queryBuilder.and(predicate));
-		}
+		
+		cq.where(criteria.toArray(new Predicate[criteria.size()]));
+		
+				
 		TypedQuery<Customer> compoundQuery = em.createQuery(cq);
+		System.out.println("----");
+		
+		for (String key : parameterMap.keySet()){			
+			String val = parameterMap.get(key);
+			System.out.println(key + "-->" + val);
+			compoundQuery.setParameter(key, val);
+			
+		}
 		List<Customer> results = compoundQuery.getResultList();		
 		SearchResponse<Customer> response = new SearchResponse<Customer>(results,5); //TODO: pagination
 		return response;

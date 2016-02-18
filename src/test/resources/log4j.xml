@@ -31,12 +31,12 @@
 	<logger name="org.springframework.web">
 		<level value="info" />
 	</logger>
-	<logger name="log4j.logger.org.hibernate.SQL">
-		<level value="debug" />
-	</logger>
-	<logger name="log4j.logger.org.hibernate.type">
-		<level value="trace" />
-	</logger>
+
+	<!--  http://stackoverflow.com/questions/436276/configuring-hibernate-logging-using-log4j-xml-config-file -->
+	<!-- Log all SQL DML statements as they are executed -->
+	<logger name="org.hibernate.SQL">
+		<level value="debug"/>
+	</logger>		
 
 	<!-- Root Logger -->
 	<root>

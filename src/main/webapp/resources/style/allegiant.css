@@ -115,5 +115,26 @@ SEARCH
 */
 table.searchPredicates td{
 	margin: 3px;
-	border: 2px solid blue;
+	border: 2px solid blue;	
+}
+
+div.predicate {
+	display: table-row;
+}
+div.predicate span.predicateName{
+	display: table-cell;
+}
+div.predicate  select{
+	display: table-cell;	
+}
+div.predicate .predicateInput{
+	display: table-cell;
+}
+div.predicate{
+	width: 100%;
+	
+}
+
+table.results{
+	width: 100%;
 }

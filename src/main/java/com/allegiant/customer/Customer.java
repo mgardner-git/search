@@ -1,8 +1,20 @@
 package com.allegiant.customer;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 
 /**
@@ -37,6 +49,7 @@ public class Customer implements Serializable {
 	private float longitude;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	@Column(name="updated_at")
 	private Date updatedAt;
 
@@ -107,6 +120,9 @@ public class Customer implements Serializable {
 		this.longitude = longitude;
 	}
 
+	
+	@JsonFormat(pattern="yyyy-mm-dd HH:mm:ss")
+	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getUpdatedAt() {
 		return this.updatedAt;
 	}

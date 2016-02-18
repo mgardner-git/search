@@ -1,3 +1,18 @@
 <div>
-	<predicates predicate-config="predicateConfig"></predicates>
+	<table class="searchPredicates">
+	<thead></thead>
+	<tbody>
+		<tr>
+			<td ng-repeat="predicate in searchRequest.predicates">
+				<predicate callback = "loadSearchResults" predicate="predicate"></predicate>	
+			</td>
+			<td>
+				<button ng-click="loadSearchResults()">Search</button>
+				
+		</tr>
+		</tbody>
+	</table>
+
+	<results search-request="searchRequest" search-response="searchResponse" busy="busy"></results>
+	
 </div>

@@ -8,31 +8,41 @@
 	
 	var app = angular.module('allegiantApp');
 	app.controller('searchController', function($scope, $http, $timeout) {
-		$scope.customers = [];
+		$scope.searchResponse = {};
 		$scope.pageNumber = 1;
-		$scope.predicateConfig = [
-			{
-				name: "createDateTime",
-				type: "date"
-			},
-			{
-				name: "firstName",
-				type: "string"
-			},
-			{
-				name: "lastName",
-				type: "string"
-			},
-			{
-				name: "emailAddress",
-				type: "string"
-			}
-		]
+		$scope.searchRequest = {
+				pageNumber: 1,
+				itemsPerPage: 20,
+				predicates:[
+		
+				{
+					name: "createdAt",
+					label: "Signed Up",
+					type: "DATE"
+				},
+				{
+					name: "firstName",
+					label: "First Name",
+					type: "STRING"
+				},
+				{
+					name: "lastName",
+					label : "Last Name",
+					type: "STRING"
+				},
+				{
+					name: "email",
+					label : "Email",
+					type: "STRING"
+				}
+				]
+		};
 	});
 </script>
 
 <div ng-controller="searchController">
-	<p><search-wrapper predicate-config="predicateConfig" search-results="customers" page-number="pageNumber" search-url="rest/customers/search"></search-wrapper></p>
+
+	<p><search-wrapper search-request="searchRequest" search-response="searchResponse" search-url="rest/customer/search"></search-wrapper></p>
 </div>
 
 <jsp:include page="footer.jsp"/>

@@ -170,7 +170,7 @@
 	        <artifactId>jackson-annotations</artifactId>
 	        <version>2.5.1</version>
 	    </dependency>
-	    	    <dependency>
+	    <dependency>
   			<groupId>org.codehaus.jackson</groupId>
   			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.5</version>

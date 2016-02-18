@@ -1,7 +1,19 @@
-<table class="searchPredicates">
-	<tr ng-repeat="result in searchResults">
-		<td ng-repeat = "config in predicateConfig">
-			<span>{{result[config.name]}}</span>
+<div>
+
+<table class="results" border="1">
+	<thead>
+	<tr>
+		<th ng-repeat = "predicate in searchRequest.predicates">
+			{{predicate.label}}
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="result in searchResponse.results">
+		<td ng-repeat = "predicate in searchRequest.predicates">
+			<span>{{formatResults(predicate, result[predicate.name])}}</span>
 		</td>
 	</tr>
+	</tbody>
 </table>
+</div>

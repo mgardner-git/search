@@ -13,8 +13,9 @@ app.directive("dateTime",function(){
 		link: function($scope, element, attrs){
 			var inputNode = jQuery(element).find("input");
 			inputNode.datetimepicker({
-				dateFormat: 'dd-mm-yy',
-				timeFormat: "hh:mm tt",
+				changeYear: true,
+				dateFormat: 'yy-mm-dd',
+				timeFormat: "HH:mm:ss",
 				showSecond: null,
 				showMicrosecond: false,
 				showTimezone: false,

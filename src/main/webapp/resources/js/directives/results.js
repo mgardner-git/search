@@ -1,18 +1,29 @@
 /**
  * A Directive to show a table containing the results of a search.
  */
-app.directive("search",function(){
+app.directive("results",function(){
 	return{ 
 		restrict: "E",
 		templateUrl:"resources/js/directives/templates/results.html",
 		scope:{			
-			searchResults: "=",
-			predicateConfig:"="
+			searchRequest : "=",
+			searchResponse: "=",			
 		},
 		link: function($scope, element, attrs){
 		} ,
 		controller: function($scope){
-			
+			console.log("Results Controller");
+			$scope.formatResults = function (predicate,result){
+				if (predicate.type == "DATE"){
+					var time = parseInt(result);
+					var date = new Date(time);
+					var formattedDate = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+					formattedDate = formattedDate  + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+					return formattedDate;
+				}else{
+					return result;
+				}
+			}
 		}
 	};
 });
