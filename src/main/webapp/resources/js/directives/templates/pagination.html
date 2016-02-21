@@ -3,12 +3,12 @@
 	<select ng-model="searchRequest.itemsPerPage">
 		<option ng-repeat="q in quantities" value="{{q}}">{{q}}</option>
 	</select>
-	<label>Page #</label>
+	<label>Page # {{searchResponse.pageNumber}}</label>
 	<ul class="pageNumbers">
 		<li ng-click="first()" class="first"></li>
 		<li ng-click="previous()" class="previous"></li>
 		<li ng-repeat="pageNumber in pages" ng-class="{currentPage: pageNumber == searchResponse.pageNumber, localPage: isLocal(pageNumber)}"
-			 ng-click="searchRequest.pageNumber = pageNumber">{{pageNumber}}</li>
+			 ng-click="setPageNumber(pageNumber)">{{pageNumber}}</li>
 		<li ng-click="next()" class="next"></li>
 		<li ng-click="last()" class="last"></li>
 	</ul>

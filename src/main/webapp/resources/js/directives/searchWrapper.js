@@ -9,7 +9,7 @@ app.directive("searchWrapper",function(){
 		},
 		link: function($scope, element, attrs){
 		} ,
-		controller: function($scope){
+		controller: function($scope, $timeout){
 			$scope.busy = false;
 			
 			/**
@@ -24,7 +24,7 @@ app.directive("searchWrapper",function(){
 				for (var index=0; index < $scope.searchRequest.predicates.length; index++){
 					var predicate = $scope.searchRequest.predicates[index];
 					var isEntered = false;
-					if (predicate.type == "DATE"){
+					if (predicate.type == "DATE" || predicate.type=="NUMBER"){
 						isEntered = predicate.operator && predicate.value;
 					}else{
 						isEntered = predicate.operator && predicate.value && predicate.value.length > 0;
@@ -59,8 +59,17 @@ app.directive("searchWrapper",function(){
 				});		
 			}
 			
+			//throttle searching to at most once per second, so that we don't search on every keystroke or change
+			$scope.searchThrottle = null;
+			$scope.$on("search", function(){
+				$timeout.cancel($scope.searchThrottle);
+				$scope.searchThrottle = $timeout(function(){
+					console.log("Search Timeout Firing");
+					$scope.loadSearchResults();					
+				},1000);
+			});
 			
-			$scope.$watch("searchRequest", $scope.loadSearchResults,true);
+			//$scope.$watch("searchRequest", $scope.loadSearchResults,true);
 		}
 	};
 });
