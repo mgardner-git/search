@@ -2,9 +2,9 @@
 	<div class="predicate">
 		<span class="predicateName">{{predicate.label}}</span>
 		<select ng-model="predicate.operator" ng-disabled="busy">
-			<option ng-if="predicate.type=='DATE' || predicate.type=='number'" value="GREATERTHAN">&gt;</option>
-			<option ng-if="predicate.type=='DATE' || predicate.type=='number'" value="LESSTHAN">&lt;</option>
-			<option ng-if="predicate.type=='DATE' || predicate.type=='number'" value="EQUAL">&#61</option>
+			<option ng-if="predicate.type=='DATE' || predicate.type=='NUMBER'" value="GREATERTHAN">&gt;</option>
+			<option ng-if="predicate.type=='DATE' || predicate.type=='NUMBER'" value="LESSTHAN">&lt;</option>
+			<option ng-if="predicate.type=='DATE' || predicate.type=='NUMBER'" value="EQUAL">&#61</option>
 			<option ng-if="predicate.type=='STRING'" value="CONTAINS">Contains</option>
 			<option ng-if="predicate.type=='STRING'" value="BEGINSWITH">Begins With</option>
 		</select>		

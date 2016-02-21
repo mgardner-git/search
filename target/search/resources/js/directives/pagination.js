@@ -43,24 +43,31 @@ app.directive("pagination",function(){
 			}
 			$scope.first = function(){
 				if ($scope.searchRequest.pageNumber > 1){
-					$scope.searchRequest.pageNumber = 1;
-				}
+					$scope.setPageNumber(1);
+				}				
 			}
 			$scope.last = function(){
 				if ($scope.searchResponse != null && $scope.searchRequest.pageNumber < $scope.searchResponse.numPages){
-					$scope.searchRequest.pageNumber = $scope.searchResponse.numPages;
-				}
+					$scope.setPageNumber($scope.searchResponse.numPages);
+				}				
 			}
 			$scope.next = function(){
 				if ($scope.searchResponse != null && $scope.searchRequest.pageNumber < $scope.searchResponse.numPages){
-					$scope.searchRequest.pageNumber++;
-				}
+					$scope.setPageNumber($scope.searchRequest.pageNumber+1);
+				}				
 			}
 			$scope.previous = function(){
 				if ($scope.searchRequest.pageNumber > 1){
-					$scope.searchRequest.pageNumber --;
-				}
+					$scope.setPageNumber($scope.searchRequest.pageNumber - 1);
+				}				
 			}
+			$scope.setPageNumber = function(pageNumber){
+				$scope.searchRequest.pageNumber = pageNumber;
+				$scope.$emit("search");
+			}
+			$scope.$watch("searchRequest.itemsPerPage", function(){
+				$scope.$emit("search");
+			});
 		}
 	};
 });

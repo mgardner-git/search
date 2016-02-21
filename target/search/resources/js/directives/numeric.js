@@ -1,7 +1,7 @@
 app.directive("numeric",function(){
 	return{ 
 		restrict: "E",
-		template:'<input type="text" class="{{cssClass}}" ng-model="fieldName" tabIndex="{{tabIndex}}" placeholder="{{placeholder}}" ng-blur="blur()"></input>',
+		template:'<input type="text" class="{{cssClass}}" ng-model="fieldName" tabIndex="{{tabIndex}}" ng-model-options="{updateOn: \'blur\'}" placeholder="{{placeholder}}"></input>',
 		scope:{
 			cssClass: "@",
 			tabIndex: "@",
@@ -14,8 +14,7 @@ app.directive("numeric",function(){
 			var inputNode = jQuery(element).find("input");
 			inputNode.spinner({
 				min: 0,
-				spin: function(event,ui){
-					console.log(ui.value);
+				spin: function(event,ui){					
 					$scope.$apply(function(){
 						$scope.fieldName =ui.value;
 					});

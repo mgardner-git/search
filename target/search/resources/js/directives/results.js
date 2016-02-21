@@ -31,7 +31,7 @@ app.directive("results",function(){
 				sort.sortType = event.ctrlKey ? "DESC":"ASC";
 				sorts.push(sort);
 				$scope.searchRequest.sorts = sorts;
-				//TODO: Need some kind of visual marker on the header
+				$scope.$emit("search"); //trigger a search in searchWrapper.js
 			};
 			
 			$scope.isAscendingSort = function(predicate){

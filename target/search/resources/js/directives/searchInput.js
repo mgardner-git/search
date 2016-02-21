@@ -6,7 +6,7 @@ app.directive("searchInput",function(){
 		restrict: "E",
 		templateUrl:"resources/js/directives/templates/searchInput.html",
 		scope:{			
-			predicate: "="						
+			predicate: "="
 		},
 		link: function($scope, element, attrs){
 		} ,
